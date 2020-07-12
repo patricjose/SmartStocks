@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SmartStocks.Models;
+using SmartStocksAPI.Models;
 
-namespace SmartStocks.Controllers
+namespace SmartStocksAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

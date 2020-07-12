@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SmartStocks.Models;
+using SmartStocksAPI.Models;
 
-namespace SmartStocks
+namespace SmartStocksAPI
 {
     public class Startup
     {

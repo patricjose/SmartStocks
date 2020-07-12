@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartStocks.Models
+namespace SmartStocksAPI.Models
 {
     public class Wallet
     {

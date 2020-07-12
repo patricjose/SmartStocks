@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartStocks.Models
+namespace SmartStocksAPI.Models
 {
     public class Asset 
     {
