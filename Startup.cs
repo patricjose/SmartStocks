@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SmartStocksAPI.Models;
+using SmartStocksAPI.Data;
 
 namespace SmartStocksAPI
 {
@@ -23,6 +23,9 @@ namespace SmartStocksAPI
             services.AddDbContext<WalletContext>(opt =>
                opt.UseInMemoryDatabase("WalletList"));
             services.AddControllers();
+
+            services.AddDbContext<FundContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("FundContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

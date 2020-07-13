@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using SmartStocksAPI.Models;
 
-namespace SmartStocksAPI.Models
+namespace SmartStocksAPI.Data
 {
     public class WalletContext : DbContext
     {

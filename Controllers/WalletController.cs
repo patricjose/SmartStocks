@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartStocksAPI.Data;
 using SmartStocksAPI.Models;
 
 namespace SmartStocksAPI.Controllers
@@ -24,9 +25,10 @@ namespace SmartStocksAPI.Controllers
         public async Task<ActionResult<IEnumerable<Wallet>>> GetWallets()
         {
             var walletList = await _context.Wallets.ToListAsync();
+            var assetList = await _context.Assets.ToListAsync();
 
             foreach (Wallet w in walletList)
-                w.Assets = _context.Assets.Where(a => a.WalletId == w.Id);
+                w.Assets = assetList.Where(a => a.WalletId == w.Id);
 
             return walletList;
         }
