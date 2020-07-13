@@ -9,7 +9,7 @@ namespace SmartStocksAPI.Models
         [Key]
         public Guid Id { get; set; }
         public string Fund { get; set; }
-        public ICollection<Asset> Assets { get; set; }
+        public IEnumerable<Asset> Assets { get; set; }
         public decimal Total { get; set; }
     }
 }

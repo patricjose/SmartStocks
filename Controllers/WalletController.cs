@@ -23,7 +23,12 @@ namespace SmartStocksAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Wallet>>> GetWallets()
         {
-            return await _context.Wallets.ToListAsync();
+            var walletList = await _context.Wallets.ToListAsync();
+
+            foreach (Wallet w in walletList)
+                w.Assets = _context.Assets.Where(a => a.WalletId == w.Id);
+
+            return walletList;
         }
 
         // GET: api/Wallet/5

@@ -9,6 +9,6 @@ namespace SmartStocksAPI.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public decimal Size { get; set; }
-        public decimal WalletId {get; set; }
+        public Guid WalletId {get; set; }
     }
 }
