@@ -7,36 +7,52 @@ using Microsoft.EntityFrameworkCore;
 using SmartStocksAPI.Data;
 using SmartStocksAPI.Models;
 
-namespace SmartStocks.Controllers
+namespace SmartStocksAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FundController : ControllerBase
+    public class FundController : ControllerBase, IFundController
     {
         private readonly FundContext _context;
+        private readonly IWalletController _walletController;
 
-        public FundController(FundContext context)
+        public FundController(FundContext context, IWalletController walletController)
         {
             _context = context;
+            _walletController = walletController;
         }
 
         // GET: api/Fund
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Fund>>> GetFund()
         {
-            return await _context.Fund.ToListAsync();
+            var getWallets = await _walletController.GetWallets();
+            var wallets = getWallets.Value;
+            var funds = await _context.Funds.ToListAsync();
+
+            foreach (Fund f in funds)
+            {
+                if (wallets.Count() != 0)
+                    f.Wallet = wallets.First(w => w.Fund == f.FundName);
+            }
+
+            return funds;
         }
 
-        // GET: api/Fund/5
+        // GET: api/Fund/forpus-acoes-master-fia
         [HttpGet("{id}")]
-        public async Task<ActionResult<Fund>> GetFund(Guid id)
+        public async Task<ActionResult<Fund>> GetFund(string id)
         {
-            var fund = await _context.Fund.FindAsync(id);
+            var fund = await _context.Funds.FindAsync(id);
 
             if (fund == null)
-            {
                 return NotFound();
-            }
+
+            var getWallets = await _walletController.GetWallets();
+            var wallets = getWallets.Value;
+
+            if (wallets.Count() != 0)
+                fund.Wallet = wallets.First(w => w.Fund == fund.FundName);
 
             return fund;
         }
@@ -45,9 +61,9 @@ namespace SmartStocks.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFund(Guid id, Fund fund)
+        public async Task<IActionResult> PutFund(string id, Fund fund)
         {
-            if (id != fund.Id)
+            if (id != fund.FundName)
             {
                 return BadRequest();
             }
@@ -79,31 +95,45 @@ namespace SmartStocks.Controllers
         [HttpPost]
         public async Task<ActionResult<Fund>> PostFund(Fund fund)
         {
-            _context.Fund.Add(fund);
-            await _context.SaveChangesAsync();
+            _context.Funds.Add(fund);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (FundExists(fund.FundName))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            return CreatedAtAction("GetFund", new { id = fund.Id }, fund);
+            return CreatedAtAction("GetFund", new { id = fund.FundName }, fund);
         }
 
         // DELETE: api/Fund/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Fund>> DeleteFund(Guid id)
+        public async Task<ActionResult<Fund>> DeleteFund(string id)
         {
-            var fund = await _context.Fund.FindAsync(id);
+            var fund = await _context.Funds.FindAsync(id);
             if (fund == null)
             {
                 return NotFound();
             }
 
-            _context.Fund.Remove(fund);
+            _context.Funds.Remove(fund);
             await _context.SaveChangesAsync();
 
             return fund;
         }
 
-        private bool FundExists(Guid id)
+        private bool FundExists(string id)
         {
-            return _context.Fund.Any(e => e.Id == id);
+            return _context.Funds.Any(e => e.FundName == id);
         }
     }
 }

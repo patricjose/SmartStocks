@@ -9,9 +9,10 @@ using SmartStocksAPI.Models;
 
 namespace SmartStocksAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class WalletController : ControllerBase
+    public class WalletController : ControllerBase, IWalletController
     {
         private readonly WalletContext _context;
 
@@ -33,16 +34,18 @@ namespace SmartStocksAPI.Controllers
             return walletList;
         }
 
-        // GET: api/Wallet/5
+        // GET: api/Wallet/52a54125-b175-4ceb-8547-0275a3a66c45
         [HttpGet("{id}")]
         public async Task<ActionResult<Wallet>> GetWallet(Guid id)
         {
             var wallet = await _context.Wallets.FindAsync(id);
 
             if (wallet == null)
-            {
                 return NotFound();
-            }
+
+            var assetList = await _context.Assets.ToListAsync();
+
+            wallet.Assets = assetList.Where(a => a.WalletId == wallet.Id);
 
             return wallet;
         }

@@ -9,6 +9,6 @@ namespace SmartStocksAPI.Data
         {
         }
 
-        public DbSet<Fund> Fund { get; set; }
+        public DbSet<Fund> Funds { get; set; }
     }
 }

@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using SmartStocksAPI.Controllers;
 using SmartStocksAPI.Data;
 
 namespace SmartStocksAPI
@@ -20,12 +23,13 @@ namespace SmartStocksAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WalletContext>(opt =>
-               opt.UseInMemoryDatabase("WalletList"));
-            services.AddControllers();
+            services.AddDbContext<WalletContext>(opt => opt.UseInMemoryDatabase("WalletList"));            
+            services.AddDbContext<FundContext>(opt => opt.UseInMemoryDatabase("FundList"));
 
-            services.AddDbContext<FundContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("FundContext")));
+            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+            services.AddScoped<IWalletController, WalletController>();
+
+            services.AddMvc().AddControllersAsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
