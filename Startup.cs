@@ -25,9 +25,11 @@ namespace SmartStocksAPI
         {
             services.AddDbContext<WalletContext>(opt => opt.UseInMemoryDatabase("WalletList"));            
             services.AddDbContext<FundContext>(opt => opt.UseInMemoryDatabase("FundList"));
+            services.AddDbContext<RecommendedWalletContext>(opt => opt.UseInMemoryDatabase("RecommendedWalletList"));
 
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddScoped<IWalletController, WalletController>();
+            services.AddScoped<IFundController, FundController>();
 
             services.AddMvc().AddControllersAsServices();
         }

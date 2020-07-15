@@ -33,7 +33,7 @@ namespace SmartStocksAPI.Controllers
             foreach (Fund f in funds)
             {
                 if (wallets.Count() != 0)
-                    f.Wallet = wallets.First(w => w.Fund == f.FundName);
+                    f.Wallet = wallets.First(w => w.FundName == f.FundName);
             }
 
             return funds;
@@ -52,7 +52,7 @@ namespace SmartStocksAPI.Controllers
             var wallets = getWallets.Value;
 
             if (wallets.Count() != 0)
-                fund.Wallet = wallets.First(w => w.Fund == fund.FundName);
+                fund.Wallet = wallets.First(w => w.FundName == fund.FundName);
 
             return fund;
         }

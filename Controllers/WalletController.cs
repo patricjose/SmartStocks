@@ -43,10 +43,6 @@ namespace SmartStocksAPI.Controllers
             if (wallet == null)
                 return NotFound();
 
-            var assetList = await _context.Assets.ToListAsync();
-
-            wallet.Assets = assetList.Where(a => a.WalletId == wallet.Id);
-
             return wallet;
         }
 
