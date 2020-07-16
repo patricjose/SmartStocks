@@ -23,6 +23,8 @@ namespace SmartStocksAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
+
             services.AddDbContext<WalletContext>(opt => opt.UseInMemoryDatabase("WalletList"));            
             services.AddDbContext<FundContext>(opt => opt.UseInMemoryDatabase("FundList"));
             services.AddDbContext<RecommendedWalletContext>(opt => opt.UseInMemoryDatabase("RecommendedWalletList"));
@@ -51,6 +53,7 @@ namespace SmartStocksAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
