@@ -32,12 +32,18 @@ until finished
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
-
+-->
 ## Running the tests
 
-Explain how to run the automated tests for this system
+### Healthcheck
 
-### Break down into end to end tests
+Checking if the API is alive
+
+```
+https://localhost:5001/health
+```
+
+<!--### Break down into end to end tests
 
 Explain what these tests test and why
 
