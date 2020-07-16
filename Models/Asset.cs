@@ -10,5 +10,6 @@ namespace SmartStocksAPI.Models
         public string Name { get; set; }
         public decimal Size { get; set; }
         public Guid WalletId {get; set; }
+        public decimal Percentage { get; set; }
     }
 }

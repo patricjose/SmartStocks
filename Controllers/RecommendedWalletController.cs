@@ -26,21 +26,35 @@ namespace SmartStocksAPI.Controllers
 
         // GET: api/RecommendedWallet/{fundNames}
         [HttpGet]
-        public async Task<ActionResult<RecommendedWallet>> GetRecommendedWallet(string fundName)
+        public async Task<ActionResult<RecommendedWallet>> GetRecommendedWallet(string fundNames, int stocksLimit)
         {
             var RecommendedWallet = new RecommendedWallet();
 
-            var fund = await _fundController.GetFund(fundName);
-            var wallet = await _walletController.GetWallet(fund.Value.Wallet.Id);
-            
-            RecommendedWallet.Id = new Guid();
-            RecommendedWallet.Assets = wallet.Value.Assets.OrderByDescending(s => s.Size).Take(5);
-            RecommendedWallet.FundNames = new List<string>();
-            RecommendedWallet.FundNames.Add(fundName);
+            RecommendedWallet.FundNames = fundNames.Split(',');
+            RecommendedWallet.Id = Guid.NewGuid();
             RecommendedWallet.Performance12Months = 0;
             RecommendedWallet.Performance6Months = 0;
             RecommendedWallet.Performance1Month = 0;
-            RecommendedWallet.Total = RecommendedWallet.Assets.Select(s => s.Size).Sum();
+            RecommendedWallet.Assets = new List<Asset>();
+
+            foreach (string f in RecommendedWallet.FundNames)
+            {
+                var fund = await _fundController.GetFund(f);
+                if (fund.Value != null)
+                {
+                    var wallet = await _walletController.GetWallet(fund.Value.Wallet.Id);
+                    
+                    foreach (Asset a in wallet.Value.Assets.OrderByDescending(s => s.Size).Take(stocksLimit))
+                    {
+                        if (stocksLimit > RecommendedWallet.Assets.Count() || RecommendedWallet.Assets.OrderBy(s => s.Percentage).First().Percentage < a.Percentage)
+                            RecommendedWallet.Assets.Add(a);
+                    }   
+
+                    RecommendedWallet.Total = RecommendedWallet.Assets.Select(s => s.Size).Sum();
+                }
+            }
+
+            RecommendedWallet.Assets = RecommendedWallet.Assets.OrderByDescending(s => s.Percentage).Take(stocksLimit).ToList();
 
             return RecommendedWallet;
         }

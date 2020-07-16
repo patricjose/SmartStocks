@@ -10,7 +10,7 @@ namespace SmartStocksAPI.Controllers
     {
         Task<ActionResult<RecommendedWallet>> DeleteRecommendedWallet(Guid id);
         Task<ActionResult<RecommendedWallet>> GetRecommendedWallet(Guid id);
-        Task<ActionResult<RecommendedWallet>> GetRecommendedWallet(string fundName);
+        Task<ActionResult<RecommendedWallet>> GetRecommendedWallet(string fundName, int stocksLimit);
         Task<ActionResult<RecommendedWallet>> PostRecommendedWallet(RecommendedWallet recommendedWallet);
         Task<IActionResult> PutRecommendedWallet(Guid id, RecommendedWallet recommendedWallet);
     }
