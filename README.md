@@ -71,7 +71,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Patrick José** - *Initial work* - [PurpleBooth](https://github.com/patrick-jose)
+* **[Patrick José]** - *Initial work* - (https://github.com/patrick-jose) - [Linkedin] (https://www.linkedin.com/in/patrick-jos%C3%A9-08080674/)
 
 <!--See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
